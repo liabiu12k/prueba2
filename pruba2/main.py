@@ -1,41 +1,26 @@
-import os
-from flask import Flask, request
 from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler, ContextTypes, filters
 
-# Crear la aplicación Flask
-app = Flask(__name__)
+# Función para manejar el mensaje "Hello World!"
+async def say_hello(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Hello World!")
 
-# Configurar el bot de Telegram
+# Configurar el token del bot
 TOKEN = "7721418131:AAGRzdKFFHRfHjdtfAdZCc7l4N8HH1jKzjE"
+"
 application = ApplicationBuilder().token(TOKEN).build()
 
-# Función para manejar el comando /start
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Responde con un saludo cuando el usuario envía el comando /start."""
-    await update.message.reply_text("Hola Mundo! 👋")
+# Función para manejar el comando /help
+async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Ayuda del bot: esto es un bot para desplegar ")
 
-# Añadir manejadores al bot
-application.add_handler(CommandHandler("start", start))
+# Añadir manejadores
+application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, say_hello))
+application.add_handler(CommandHandler("help", help))
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    """Procesa las actualizaciones enviadas por Telegram."""
-    # Decodificar la solicitud entrante
-    json_str = request.get_data().decode('utf-8')
-    update = Update.de_json(json_str, application.bot)
+# Iniciar el bot
+print("Running")
+application.run_polling(allowed_updates=Update.ALL_TYPES)
 
-    # Procesar la actualización con el bot
-    application.process_update(update)
-    return 'OK'
-
-if __name__ == "__main__":
-    # Configurar el webhook
-    webhook_url = f"https://prueba2-zqoh.onrender.com/webhook"
-    application.bot.set_webhook(webhook_url)
-
-    # Ejecutar la aplicación Flask
-    port = int(os.environ.get("PORT", 5000))  # Render asigna automáticamente el puerto
-    app.run(host="0.0.0.0", port=port)
 
 
