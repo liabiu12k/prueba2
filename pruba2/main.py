@@ -31,7 +31,7 @@ def webhook():
 
 if __name__ == "__main__":
     # Configurar el webhook
-    webhook_url = f"https://prueba2-9vjs.onrender.com/webhook"
+    webhook_url = f"https://prueba2-zqoh.onrender.com"
     application.bot.set_webhook(webhook_url)
 
     # Ejecutar la aplicación Flask
