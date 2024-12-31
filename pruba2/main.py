@@ -31,10 +31,11 @@ def webhook():
 
 if __name__ == "__main__":
     # Configurar el webhook
-    webhook_url = f"https://prueba2-zqoh.onrender.com"
+    webhook_url = f"https://prueba2-zqoh.onrender.com/webhook"
     application.bot.set_webhook(webhook_url)
 
     # Ejecutar la aplicación Flask
     port = int(os.environ.get("PORT", 5000))  # Render asigna automáticamente el puerto
     app.run(host="0.0.0.0", port=port)
+
 
